@@ -1,23 +1,28 @@
 import string
 from collections import Counter
 
-def calculate_word_frequency(text):
-   
+def process_text(text):
     translator = str.maketrans('', '', string.punctuation)
-    tokens = text.translate(translator).lower().split()
+    text = text.translate(translator).lower()
+    return text.split()
 
-    word_frequency = Counter(tokens)
+if _name_ == "_main_":
+    # Get file name input from the user
+    file_name = input("Enter the file name (including extension): ")
 
-    sorted_word_frequency = dict(sorted(word_frequency.items(), key=lambda item: item[1], reverse=True))
+    try:
+        # Read the text document
+        with open(file_name, "r") as file:
+            text = file.read()
 
-    return sorted_word_frequency
+        # Process the text and calculate the frequency distribution
+        words = process_text(text)
+        frequency_dict = Counter(words)
 
-def display_word_frequency(word_frequency):
-    
-    for word, count in word_frequency.items():
-        print(f"{word}: {count}")
+        # Display the frequency distribution
+        print("Word Frequency Distribution:")
+        for word, frequency in frequency_dict.items():
+            print(f"{word}: {frequency}")
 
-if __name__ == "__main__":
-    text = input("Enter the text document: ")
-    word_frequency = calculate_word_frequency(text)
-    display_word_frequency(word_frequency)
+    except FileNotFoundError:
+        print(f"Error: File '{file_name}' not found.")
